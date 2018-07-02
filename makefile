@@ -8,5 +8,4 @@ build: clean
 clean:
 	@rm -rf frames
 	@mkdir frames
-	@rm -rf out
-	@mkdir out
+	@mkdir -p out
