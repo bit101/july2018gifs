@@ -52,7 +52,9 @@ func July27() {
 		}
 	}
 
-	render := func(surface *blgo.Surface, percent float64) {
+	surface := blgo.NewSurface(width, height)
+	animation := anim.NewAnimation(surface, frames, framesDir)
+	animation.Render(func(percent float64) {
 		random.Seed(0)
 		surface.ClearRGB(1, 1, 1)
 		surface.SetLineWidth(0.25)
@@ -60,7 +62,7 @@ func July27() {
 		surface.Translate(-percent*width, 0)
 		surface.Grid(0, 0, width*2, height, size, size)
 		surface.SetLineWidth(5)
-		surface.SetLineCap(cairo.LINE_CAP_ROUND)
+		surface.SetLineCap(cairo.LineCapRound)
 		for x := 0.0; x < width; x += size {
 			for y := 0.0; y < height; y += size {
 				mode := random.IntRange(0, 3)
@@ -78,10 +80,7 @@ func July27() {
 			}
 		}
 		surface.Restore()
-	}
-
-	animation := anim.NewAnimation(width, height, frames)
-	animation.Render(framesDir, "frame", render)
+	})
 	util.ConvertToGIF(framesDir, outFileName, fps)
 	util.ViewImage(outFileName)
 }

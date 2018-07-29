@@ -22,7 +22,9 @@ func July26() {
 		size          = 20.0
 	)
 
-	render := func(surface *blgo.Surface, percent float64) {
+	surface := blgo.NewSurface(width, height)
+	animation := anim.NewAnimation(surface, frames, framesDir)
+	animation.Render(func(percent float64) {
 		grid := func(s *blgo.Surface, w, h, tx, ty float64) {
 			t := blmath.LerpSin(percent+tx, 0.125, 0.5)
 			tt := blmath.LerpSin(percent+ty, 0.125, 0.5)
@@ -35,10 +37,7 @@ func July26() {
 
 		surface.ClearRGB(1, 1, 1)
 		RenderGrid(surface, 40, 40, grid)
-	}
-
-	animation := anim.NewAnimation(width, height, frames)
-	animation.Render(framesDir, "frame", render)
+	})
 	util.ConvertToGIF(framesDir, outFileName, fps)
 	util.ViewImage(outFileName)
 }

@@ -9,6 +9,7 @@ import (
 	"github.com/bit101/blgo/util"
 )
 
+// July17 ...
 func July17() {
 	const (
 		outFileName   = "out/july17.gif"
@@ -22,7 +23,9 @@ func July17() {
 		scale         = 0.01
 	)
 
-	render := func(surface *blgo.Surface, percent float64) {
+	surface := blgo.NewSurface(width, height)
+	animation := anim.NewAnimation(surface, frames, framesDir)
+	animation.Render(func(percent float64) {
 		random.Seed(0)
 		surface.SetLineWidth(0.5)
 		surface.ClearRGB(1, 1, 1)
@@ -43,10 +46,7 @@ func July17() {
 		}
 
 		surface.Save()
-	}
-
-	animation := anim.NewAnimation(width, height, frames)
-	animation.Render(framesDir, "frame", render)
+	})
 	util.ConvertToGIF(framesDir, outFileName, fps)
 	util.ViewImage(outFileName)
 }

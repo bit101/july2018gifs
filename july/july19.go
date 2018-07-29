@@ -9,6 +9,7 @@ import (
 	"github.com/bit101/blgo/util"
 )
 
+// July19 ...
 func July19() {
 	const (
 		outFileName   = "out/july19.gif"
@@ -25,7 +26,7 @@ func July19() {
 	points2 := make([]*geom.Point, 20)
 	index := 0
 	random.Seed(0)
-	for i := 0.0; i < 10; i += 1 {
+	for i := 0.0; i < 10; i++ {
 		points[index] = geom.NewPoint(i*50, 100)
 		points[index+1] = geom.NewPoint(i*50, 200)
 		points2[index] = geom.NewPoint(points[index].X+random.FloatRange(-100, 100), points[index].Y+random.FloatRange(-100, 100))
@@ -33,13 +34,15 @@ func July19() {
 		index += 2
 	}
 
-	render := func(surface *blgo.Surface, percent float64) {
+	surface := blgo.NewSurface(width, height)
+	animation := anim.NewAnimation(surface, frames, framesDir)
+	animation.Render(func(percent float64) {
 		random.Seed(0)
 		surface.SetLineWidth(0.5)
 		surface.ClearRGB(1, 1, 1)
 		t := blmath.LerpSin(percent, 0, 1)
 
-		for i := 0; i < 18; i += 1 {
+		for i := 0; i < 18; i++ {
 			for j := 0; j < 1000; j++ {
 				pA := geom.LerpPoint(t, points[i], points2[i])
 				pB := geom.LerpPoint(t, points[i+1], points2[i+1])
@@ -49,10 +52,7 @@ func July19() {
 			}
 		}
 		// surface.Points(points, 5)
-	}
-
-	animation := anim.NewAnimation(width, height, frames)
-	animation.Render(framesDir, "frame", render)
+	})
 	util.ConvertToGIF(framesDir, outFileName, fps)
 	util.ViewImage(outFileName)
 }

@@ -9,6 +9,7 @@ import (
 	"github.com/bit101/blgo/util"
 )
 
+// July05 ...
 func July05() {
 	const (
 		timeInSeconds = 4.5
@@ -42,12 +43,14 @@ func July05() {
 		}
 	}
 
-	render := func(surface *blgo.Surface, percent float64) {
+	surface := blgo.NewSurface(width, height)
+	animation := anim.NewAnimation(surface, frames, framesDir)
+	animation.Render(func(percent float64) {
 		amt := blmath.LerpSin(percent, 0, 1.5)
 		surface.ClearRGB(0.25, 0.25, 0.25)
 		surface.SetLineWidth(0.25)
-		for x := 0; x < int(count-1); x += 1 {
-			for y := 0; y < int(count-1); y += 1 {
+		for x := 0; x < int(count-1); x++ {
+			for y := 0; y < int(count-1); y++ {
 				i := y*int(count) + x
 				p0 := points[i]
 				p1 := points[i+1]
@@ -67,9 +70,7 @@ func July05() {
 				surface.Stroke()
 			}
 		}
-	}
-	animation := anim.NewAnimation(width, height, frames)
-	animation.Render(framesDir, "frame", render)
+	})
 	util.ConvertToGIF(framesDir, outFileName, fps)
 	util.ViewImage(outFileName)
 }
